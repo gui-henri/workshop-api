@@ -5,11 +5,11 @@ namespace WorkshopApi.Entities
     public class Collaborator(string name)
     {
         public Guid Id { get; init; } = Guid.NewGuid();
-        public string Name { get; set; } = name;
+        public string Name { get; private set; } = name;
 
-        public CollaboratorDTO ToDTO()
+        public void Update(string name)
         {
-            return new CollaboratorDTO(Name);
+            Name = name;
         }
 
         static public Collaborator FromDTO(CollaboratorDTO dto)

@@ -50,7 +50,7 @@ namespace WorkshopApi.Controllers
                 return NotFound();
             }
 
-            collaborator.Name = collaboratorDTO.Name;
+            collaborator.Update(collaboratorDTO.Name);
 
             try
             {

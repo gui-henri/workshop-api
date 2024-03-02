@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WorkshopApi.Entities;
 using WorkshopApi.Contexts;
+using WorkshopApi.Dto;
 
 namespace WorkshopApi.Controllers
 {
@@ -41,14 +42,20 @@ namespace WorkshopApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutWorkshop(Guid id, Workshop workshop)
+        public async Task<IActionResult> PutWorkshop(Guid id, WorkshopDTO workshopDTO)
         {
-            if (id != workshop.Id)
+            if (workshopDTO == null)
             {
                 return BadRequest();
             }
 
-            _context.Entry(workshop).State = EntityState.Modified;
+            var workshop = await _context.Workshop.FindAsync(id);
+            if (workshop == null)
+            {
+                return NotFound();
+            }
+
+            workshop.Update(workshopDTO.Name, workshopDTO.Description, workshopDTO.Date);
 
             try
             {
@@ -70,8 +77,10 @@ namespace WorkshopApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Workshop>> PostWorkshop(Workshop workshop)
+        public async Task<ActionResult<Workshop>> PostWorkshop(WorkshopDTO workshopDTO)
         {
+            var workshop = Workshop.FromDTO(workshopDTO);
+
             _context.Workshop.Add(workshop);
             await _context.SaveChangesAsync();
 
