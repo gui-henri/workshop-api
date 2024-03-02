@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WorkshopApi.Entities;
+using WorkshopApi.Contexts;
+using WorkshopApi.Dtos;
 
 namespace WorkshopApi.Controllers
 {
@@ -35,14 +37,20 @@ namespace WorkshopApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCollaborator(Guid id, Collaborator Collaborator)
+        public async Task<IActionResult> PutCollaborator(Guid id, CollaboratorDTO collaboratorDTO)
         {
-            if (id != Collaborator.Id)
+            if (collaboratorDTO == null)
             {
                 return BadRequest();
             }
 
-            _context.Entry(Collaborator).State = EntityState.Modified;
+            var collaborator = await _context.Collaborators.FindAsync(id);
+            if (collaborator == null)
+            {
+                return NotFound();
+            }
+
+            collaborator.Name = collaboratorDTO.Name;
 
             try
             {
@@ -64,12 +72,13 @@ namespace WorkshopApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Collaborator>> PostCollaborator(Collaborator Collaborator)
+        public async Task<ActionResult<Collaborator>> PostCollaborator(CollaboratorDTO collaboratorDTO)
         {
-            _context.Collaborators.Add(Collaborator);
+            var collaborator = Collaborator.FromDTO(collaboratorDTO);
+            _context.Collaborators.Add(collaborator);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetCollaborator), new { id = Collaborator.Id }, Collaborator);
+            return CreatedAtAction(nameof(GetCollaborator), new { id = collaborator.Id }, collaborator);
         }
 
         [HttpDelete("{id}")]
