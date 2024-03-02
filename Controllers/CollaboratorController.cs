@@ -15,16 +15,14 @@ namespace WorkshopApi.Controllers
             _context = context;
         }
 
-        // GET: api/WorkshopContext
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Collaborator>>> GetCollaborators()
         {
             return await _context.Collaborators.ToListAsync();
         }
 
-        // GET: api/Collaborator/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Collaborator>> GetCollaborator(int id)
+        public async Task<ActionResult<Collaborator>> GetCollaborator(Guid id)
         {
             var Collaborator = await _context.Collaborators.FindAsync(id);
 
@@ -36,10 +34,8 @@ namespace WorkshopApi.Controllers
             return Collaborator;
         }
 
-        // PUT: api/Collaborator/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCollaborator(int id, Collaborator Collaborator)
+        public async Task<IActionResult> PutCollaborator(Guid id, Collaborator Collaborator)
         {
             if (id != Collaborator.Id)
             {
@@ -67,8 +63,6 @@ namespace WorkshopApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Collaborator
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Collaborator>> PostCollaborator(Collaborator Collaborator)
         {
@@ -78,9 +72,8 @@ namespace WorkshopApi.Controllers
             return CreatedAtAction(nameof(GetCollaborator), new { id = Collaborator.Id }, Collaborator);
         }
 
-        // DELETE: api/Collaborator/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCollaborator(int id)
+        public async Task<IActionResult> DeleteCollaborator(Guid id)
         {
             var Collaborator = await _context.Collaborators.FindAsync(id);
             if (Collaborator == null)
@@ -94,7 +87,7 @@ namespace WorkshopApi.Controllers
             return NoContent();
         }
 
-        private bool CollaboratorExists(int id)
+        private bool CollaboratorExists(Guid id)
         {
             return _context.Collaborators.Any(e => e.Id == id);
         }
