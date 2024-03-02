@@ -13,14 +13,9 @@ namespace WorkshopApi.Controllers
 {
     [Route("api/workshops")]
     [ApiController]
-    public class WorkshopController : ControllerBase
+    public class WorkshopController(WorkshopContext context) : ControllerBase
     {
-        private readonly WorkshopContext _context;
-
-        public WorkshopController(WorkshopContext context)
-        {
-            _context = context;
-        }
+        private readonly WorkshopContext _context = context;
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Workshop>>> GetWorkshop()
@@ -50,6 +45,7 @@ namespace WorkshopApi.Controllers
             }
 
             var workshop = await _context.Workshop.FindAsync(id);
+
             if (workshop == null)
             {
                 return NotFound();
@@ -80,6 +76,11 @@ namespace WorkshopApi.Controllers
         public async Task<ActionResult<Workshop>> PostWorkshop(WorkshopDTO workshopDTO)
         {
             var workshop = Workshop.FromDTO(workshopDTO);
+
+            if (workshop == null)
+            {
+                return BadRequest();
+            }
 
             _context.Workshop.Add(workshop);
             await _context.SaveChangesAsync();

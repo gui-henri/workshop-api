@@ -8,14 +8,9 @@ namespace WorkshopApi.Controllers
 {
     [Route("api/colaboradores")]
     [ApiController]
-    public class CollaboratorController : ControllerBase
+    public class CollaboratorController(WorkshopContext context) : ControllerBase
     {
-        private readonly WorkshopContext _context;
-
-        public CollaboratorController(WorkshopContext context)
-        {
-            _context = context;
-        }
+        private readonly WorkshopContext _context = context;
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Collaborator>>> GetCollaborators()
@@ -43,13 +38,12 @@ namespace WorkshopApi.Controllers
             {
                 return BadRequest();
             }
-
+            
             var collaborator = await _context.Collaborators.FindAsync(id);
             if (collaborator == null)
             {
                 return NotFound();
             }
-
             collaborator.Update(collaboratorDTO.Name);
 
             try
@@ -75,6 +69,11 @@ namespace WorkshopApi.Controllers
         public async Task<ActionResult<Collaborator>> PostCollaborator(CollaboratorDTO collaboratorDTO)
         {
             var collaborator = Collaborator.FromDTO(collaboratorDTO);
+            if (collaborator == null)
+            {
+                return BadRequest();
+            }
+
             _context.Collaborators.Add(collaborator);
             await _context.SaveChangesAsync();
 

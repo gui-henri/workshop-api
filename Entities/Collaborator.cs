@@ -2,19 +2,40 @@ using WorkshopApi.Dtos;
 
 namespace WorkshopApi.Entities
 {
-    public class Collaborator(string name)
+    public class Collaborator
     {
-        public Guid Id { get; init; } = Guid.NewGuid();
-        public string Name { get; private set; } = name;
+        public Guid Id { get; init; }
+        public string Name { get; private set; }
 
-        public void Update(string name)
+        private Collaborator(string name)
         {
+            Id = Guid.NewGuid();
             Name = name;
         }
 
-        static public Collaborator FromDTO(CollaboratorDTO dto)
+        public static Collaborator? Create(string name)
         {
-            return new Collaborator(dto.Name);
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return null;
+            }
+
+            return new Collaborator(name);
+        }
+
+        public void Update(string? name)
+        {
+            if (name != null)
+            {
+                Name = name;
+            }
+        }
+
+
+        public static Collaborator? FromDTO(CollaboratorDTO dto)
+        {
+            return Create(dto.Name);
         }
     }
 }
