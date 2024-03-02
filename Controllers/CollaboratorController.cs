@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WorkshopApi.Models;
+using WorkshopApi.Entities;
 
 namespace WorkshopApi.Controllers
 {

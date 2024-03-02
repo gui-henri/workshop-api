@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using WorkshopApi.Models;
 
-namespace WorkshopApi.Models;
+namespace WorkshopApi.Contexts;
 
 public class WorkshopContext : DbContext
 {
@@ -12,5 +11,5 @@ public class WorkshopContext : DbContext
 
     public DbSet<Collaborator> Collaborators { get; set; } = null!;
 
-public DbSet<WorkshopApi.Models.Workshop> Workshop { get; set; } = default!;
+    public DbSet<WorkshopApi.Models.Workshop> Workshop { get; set; } = default!;
 }
