@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WorkshopApi.Entities;
@@ -20,7 +15,7 @@ namespace WorkshopApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Workshop>>> GetWorkshop()
         {
-            return await _context.Workshop.ToListAsync();
+            return await _context.Workshop.Include(c => c.CollaboratorWorkshops.Where(cw => cw.WorkshopId == c.Id)).ToListAsync();
         }
 
         [HttpGet("{id}")]
@@ -101,6 +96,36 @@ namespace WorkshopApi.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [HttpPost]
+        [Route("{workshopId}/collaborators/{collaboratorId}")]
+        public async Task<ActionResult<CollaboratorWorkshop>> AddCollaboratorToWorkshop(Guid workshopId, Guid collaboratorId)
+        {
+            var workshop = await _context.Workshop.FindAsync(workshopId);
+            var collaborator = await _context.Collaborators.FindAsync(collaboratorId);
+
+            if (workshop == null || collaborator == null)
+            {
+                return NotFound();
+            }
+
+
+            var collaboratorWorkshop = new CollaboratorWorkshop
+            {
+                CollaboratorId = collaboratorId,
+                WorkshopId = workshopId
+            };
+
+            workshop.CollaboratorWorkshops.Add(collaboratorWorkshop);
+            collaborator.CollaboratorWorkshops.Add(collaboratorWorkshop);
+
+            _context.Workshop.Update(workshop);
+            _context.Collaborators.Update(collaborator);
+            _context.CollaboratorWorkshop.Add(collaboratorWorkshop);
+            await _context.SaveChangesAsync();
+
+            return Created();
         }
 
         private bool WorkshopExists(Guid id)

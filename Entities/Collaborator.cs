@@ -1,4 +1,5 @@
 using WorkshopApi.Dtos;
+using System.Text.Json.Serialization;
 
 namespace WorkshopApi.Entities
 {
@@ -6,10 +7,13 @@ namespace WorkshopApi.Entities
     {
         public Guid Id { get; init; }
         public string Name { get; private set; }
+        [JsonIgnore]
+        public ICollection<CollaboratorWorkshop> CollaboratorWorkshops { get; }
 
         private Collaborator(string name)
         {
             Id = Guid.NewGuid();
+            CollaboratorWorkshops = [];
             Name = name;
         }
 

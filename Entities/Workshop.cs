@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using WorkshopApi.Dto;
 
 namespace WorkshopApi.Entities
@@ -5,13 +6,15 @@ namespace WorkshopApi.Entities
     public class Workshop
     {
         public Guid Id { get; init; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public DateOnly Date { get; set; }
+        public string Name { get; private set; }
+        public string Description { get; private set; }
+        public DateOnly Date { get; private set; }
+        public ICollection<CollaboratorWorkshop> CollaboratorWorkshops { get; }
 
         private Workshop(string name, string description, DateOnly date)
         {
             Id = Guid.NewGuid();
+            CollaboratorWorkshops = [];
             Name = name;
             Description = description;
             Date = date;
