@@ -15,7 +15,7 @@ Uma api para lhe ajudar a desenvolver aplicações de análise de participação
 4) Abra o arquivo ```appsettings.json```, você irá encontrar o seguinte trecho:
 ```
 "ConnectionStrings": {
-    "WorkshopContext": "server=<seu-servidor>;database=<nome-do-banco>;user=<seu-usuario>;password=<sua-senha>;"
+    "WorkshopContext": "server=<seu-servidor>;database=Workshop;user=<seu-usuario>;password=<sua-senha>;"
 }
 ```
 5) Troque cada informação entre <> pelas informações de conexão que você configurou no MySQL Workbench.
