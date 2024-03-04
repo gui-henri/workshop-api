@@ -7,8 +7,8 @@ namespace WorkshopApi.Interfaces
     {
         Task<ICollection<Collaborator>> GetCollaborators();
         Task<Collaborator?> GetCollaborator(Guid id);
-        Task<Collaborator?> CreateCollaborator(CollaboratorDTO collaborator);
-        Task<Collaborator?> UpdateCollaborator(Guid id, CollaboratorDTO collaborator);
-        Task<Collaborator?> DeleteCollaborator(Guid id);
+        Task<Collaborator?> CreateCollaborator(Collaborator collaborator);
+        Task<Collaborator?> UpdateCollaborator(Collaborator collaborator);
+        Task<Collaborator?> DeleteCollaborator(Collaborator collaborator);
     }
 }

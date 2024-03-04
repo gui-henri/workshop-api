@@ -4,11 +4,12 @@ namespace WorkshopApi.Interfaces
 {
     public interface IWorkshopRepository
     {
-        ICollection<Workshop> GetWorkshops();
-        Workshop GetWorkshop(Guid id);
-        Workshop CreateWorkshop(Workshop workshop);
-        Workshop UpdateWorkshop(Guid id, Workshop workshop);
-        bool WorkshopExists(Guid id);
-        void DeleteWorkshop(Guid id);
+        Task<ICollection<Workshop>> GetWorkshops();
+        Task<Workshop?> GetWorkshop(Guid id);
+        Task<Workshop?> CreateWorkshop(Workshop Workshop);
+        Task<Workshop?> UpdateWorkshop(Workshop Workshop);
+        Task<Workshop?> DeleteWorkshop(Workshop workshop);
+        Task<ICollection<Collaborator>> GetCollaborators(Guid workshopId);
+        Task<CollaboratorWorkshop?> AddCollaborator(CollaboratorWorkshop collaboratorWorkshop);
     }
 }

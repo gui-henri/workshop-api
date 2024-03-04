@@ -8,68 +8,26 @@ namespace WorkshopApi.Repositories
 {
     public class CollaboratorRepository(WorkshopContext context) : ICollaboratorRepository
     {
+
         private readonly WorkshopContext _context = context;
-
-        public async Task<Collaborator?> GetCollaborator(Guid id)
+        public async Task<Collaborator?> CreateCollaborator(Collaborator collaborator)
         {
-            return await _context.Collaborators.FindAsync(id);
-        }
+            _context.Collaborators.Add(collaborator);
 
-        public async Task<ICollection<Collaborator>> GetCollaborators()
-        {
-            try 
-            {
-                return await _context.Collaborators.ToListAsync();
-            } catch
-            {
-                return [];
-            }
-        }
-
-        public async Task<Collaborator?> UpdateCollaborator(Guid id, CollaboratorDTO collaborator)
-        {
-            var newCollaborator = await GetCollaborator(id);
-            if (newCollaborator == null) return null;
-            newCollaborator.Update(collaborator.Name);
-
-            _context.Collaborators.Update(newCollaborator);
             try
             {
                 await _context.SaveChangesAsync();
-                return newCollaborator;
+                return collaborator;
+
             }
             catch
             {
-                return null;
+                throw;
             }
         }
 
-        public async Task<Collaborator?> CreateCollaborator(CollaboratorDTO collaborator)
+        public async Task<Collaborator?> DeleteCollaborator(Collaborator collaborator)
         {
-
-            var newCollaborator = Collaborator.FromDTO(collaborator);
-            if (newCollaborator == null)
-            {
-                return null;   
-            }
-
-            _context.Collaborators.Add(newCollaborator);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-                return newCollaborator;
-
-            } catch
-            {
-                return null;
-            }
-        }
-
-        public async Task<Collaborator?> DeleteCollaborator(Guid id)
-        {
-            var collaborator = await GetCollaborator(id);
-            if (collaborator == null) return null;
             _context.Collaborators.Remove(collaborator);
             try
             {
@@ -82,6 +40,41 @@ namespace WorkshopApi.Repositories
             }
         }
 
+        public async Task<Collaborator?> GetCollaborator(Guid id)
+        {
+            return await _context.Collaborators.FindAsync(id);
+        }
 
+        public async Task<ICollection<Collaborator>> GetCollaborators()
+        {
+            try
+            {
+                var collaborators = await _context.Collaborators.ToListAsync();
+                if (collaborators == null)
+                {
+                    return [];
+                }
+                return collaborators;
+
+            } catch
+            {
+                throw;
+            }
+
+        }
+
+        public async Task<Collaborator?> UpdateCollaborator(Collaborator collaborator)
+        {
+            _context.Collaborators.Update(collaborator);
+            try
+            {
+                await _context.SaveChangesAsync();
+                return collaborator;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }
