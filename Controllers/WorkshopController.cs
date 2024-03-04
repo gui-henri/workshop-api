@@ -252,7 +252,7 @@ namespace WorkshopApi.Controllers
         ///     GET /api/workshops/xxxxxxxx-xxxx/collaborators
         ///
         /// </remarks>
-        /// <response code="200">Successfully linked workshop and collaborator</response>
+        /// <response code="200">Successfully finded collaborators on workshop</response>
         /// <response code="400">The provided workshop ID is not valid</response>
         /// <response code="404">No workshop linked to the provided ID was found</response>
         [HttpGet]

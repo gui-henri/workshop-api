@@ -6,7 +6,19 @@ using WorkshopApi.Interfaces;
 using WorkshopApi.Repositories;
 using WorkshopApi.Services;
 
+var CorsOriginsName = "CorsOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(CorsOriginsName, policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<ICollaboratorRepository, CollaboratorRepository>();
@@ -47,6 +59,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(CorsOriginsName);
 
 app.UseAuthorization();
 
